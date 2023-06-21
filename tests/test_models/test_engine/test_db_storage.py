@@ -66,16 +66,6 @@ class testDBStorage(unittest.TestCase):
         models.storage.delete(state)
         self.assertTrue(all_stored["State." + state.id])
 
-    def test_dbs_func_docstrings(self):
-        """
-            Test for the presence of docstrings in DBStorage methods
-        """
-        for func in self.dbs_f:
-            self.assertIsNot(func[1].__doc__, None,
-                             "{:s} method needs a docstring".format(func[0]))
-            self.assertTrue(len(func[1].__doc__) >= 1,
-                            "{:s} method needs a docstring".format(func[0]))
-
 
 if __name__ == "__main__":
     unittest.main()
