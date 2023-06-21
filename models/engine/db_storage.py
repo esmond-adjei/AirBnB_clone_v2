@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-'''
+"""
     Declaration for database storage
-'''
+"""
 import models
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, create_engine
@@ -17,16 +17,16 @@ import os
 
 
 class DBStorage():
-    '''
+    """
     Database storage class
-    '''
+    """
     __engine = None
     __session = None
 
     def __init__(self):
-        '''
+        """
         Creates engine connection
-        '''
+        """
         username = os.getenv('HBNB_MYSQL_USER', default=None)
         password = os.getenv('HBNB_MYSQL_PWD', default=None)
         localhost = os.getenv('HBNB_MYSQL_HOST', default=None)
@@ -37,10 +37,10 @@ class DBStorage():
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        '''
+        """
         Queries current database session based on class.
         Returns a dictionary representation of the query.
-        '''
+        """
         result = {}
         if cls:
             objects = self.__session.query(eval(cls)).all()
@@ -55,35 +55,35 @@ class DBStorage():
         return result
 
     def new(self, obj):
-        '''
+        """
         Adds the object to the current database session
-        '''
+        """
         self.__session.add(obj)
 
     def save(self):
-        '''
+        """
         Commits all changes of the current database session
-        '''
+        """
         self.__session.commit()
 
     def delete(self, obj=None):
-        '''
+        """
         Deletes from the current database session obj if not None
-        '''
+        """
         if obj:
             self.__session.delete(obj)
 
     def reload(self):
-        '''
+        """
         Creates all tables in the database and creates a new session
-        '''
+        """
         Base.metadata.create_all(self.__engine)
         Session = scoped_session(sessionmaker(
             bind=self.__engine, expire_on_commit=False))
         self.__session = Session()
 
     def close(self):
-        '''
+        """
         Closes the session
-        '''
+        """
         self.__session.close()
