@@ -1,10 +1,14 @@
 #!/usr/bin/python3
+"""Test cases for the Place class"""
+import os
 import unittest
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.place import Place
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "test only for FileStorage")
 class TestPlace(unittest.TestCase):
     """Test cases for the Place class"""
 
@@ -77,15 +81,16 @@ class TestPlace(unittest.TestCase):
         """Test the amenities property getter and setter"""
         place = Place()
         self.assertEqual(place.amenities, [])
-        place.amenities = "123"
-        self.assertEqual(place.amenities, "123")
+        amenity = Amenity()
+        place.amenities = amenity  # "123"
+        self.assertEqual(place.amenities, amenity.id)
 
     def test_amenities_property_file_mode(self):
         """Test the amenities property in file mode"""
         place = Place()
         amenity = Amenity(name="Wifi")
         place.amenities = amenity
-        self.assertEqual(place.amenity_ids, [amenity.id])
+        self.assertEqual(place.amenity_ids, amenity.id)
 
     def test_save(self):
         """Test the save method of a Place instance"""

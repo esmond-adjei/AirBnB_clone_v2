@@ -22,9 +22,13 @@ class User(BaseModel, Base):
         password = ""
         first_name = ""
         last_name = ""
+        places = ""
+        reviews = ""
 
     def __init__(self, *args, **kwargs):
         """initializes user"""
+        if "password" in kwargs.keys():
+            kwargs["password"] = md5(kwargs["password"].encode()).hexdigest()
         super().__init__(*args, **kwargs)
 
     def __setattr__(self, name, value):

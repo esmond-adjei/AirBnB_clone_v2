@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 """Test cases for the Review class"""
+import os
 import unittest
 from models.base_model import BaseModel
 from models.review import Review
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "test only for FileStorage")
 class TestReview(unittest.TestCase):
     """Test cases for the Review class"""
 

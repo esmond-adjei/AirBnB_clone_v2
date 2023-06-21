@@ -1,9 +1,13 @@
 #!/usr/bin/python3
+"""Test cases for the baseModel class"""
+import os
 import unittest
 from models.base_model import BaseModel
 from datetime import datetime
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "test only for FileStorage")
 class TestBaseModel(unittest.TestCase):
     """Test cases for the BaseModel class"""
 

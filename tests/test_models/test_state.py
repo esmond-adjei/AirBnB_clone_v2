@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Test cases for the State class"""
+import os
 import unittest
 import models
 from models.base_model import BaseModel
@@ -7,6 +8,8 @@ from models.state import State
 from models.city import City
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "test only for FileStorage")
 class TestState(unittest.TestCase):
     """Test cases for the State class"""
 

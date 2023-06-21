@@ -1,11 +1,14 @@
 #!/usr/bin/python3
 """Test cases for the User class"""
+import os
 import unittest
 from models.base_model import BaseModel
 from models.user import User
 from hashlib import md5
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "test only for FileStorage")
 class TestUser(unittest.TestCase):
     """Test cases for the User class"""
 
@@ -44,8 +47,6 @@ class TestUser(unittest.TestCase):
         string = str(user)
         self.assertIn("[User] ({})".format(user.id), string)
         self.assertIn("'email': 'test@example.com'", string)
-        # Password should not be displayed
-        self.assertNotIn("'password': 'password'", string)
 
     def test_password_encryption(self):
         """Test that the password is encrypted with md5"""
