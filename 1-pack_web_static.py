@@ -10,8 +10,7 @@ def do_pack():
     """
     Create a .tgz archive from web_static content.
     """
-    now = datetime.now()
-    timestamp = now.strftime("%Y%m%d%H%M%S")
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     archive_path = f"versions/web_static_{timestamp}.tgz"
 
     if not os.path.exists("versions"):
