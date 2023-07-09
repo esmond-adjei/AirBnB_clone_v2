@@ -1,5 +1,5 @@
 #!/user/bin/env bash
-# set up web server for static website
+# Sets up web server for static website
 
 if ! command -v nginx &> /dev/null; then
     apt-get update
