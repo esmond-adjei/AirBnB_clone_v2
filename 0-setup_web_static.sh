@@ -1,4 +1,4 @@
-#!/user/bin/env bash
+#!/usr/bin/env bash
 # Sets up web server for static website
 
 if ! command -v nginx &> /dev/null; then
