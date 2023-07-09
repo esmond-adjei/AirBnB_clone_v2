@@ -1,40 +1,34 @@
 #!/usr/bin/python3
-# Fabfile to create and distribute an archive to a web server.
+# Creates and distributes an archive to my web servers using deploy.
 import os.path
 from datetime import datetime
-from fabric.api import env
-from fabric.api import local
-from fabric.api import put
-from fabric.api import run
+from fabric.api import env, put, run, local
 
-env.hosts = ["54.160.85.72", "35.175.132.106"]
+env.hosts = ['18.207.233.152', '100.26.221.176']
 
 
 def do_pack():
-    """Create a tar gzipped archive of the directory web_static."""
-    dt = datetime.utcnow()
-    file = "versions/web_static_{}{}{}{}{}{}.tgz".format(dt.year,
-                                                         dt.month,
-                                                         dt.day,
-                                                         dt.hour,
-                                                         dt.minute,
-                                                         dt.second)
-    if os.path.isdir("versions") is False:
-        if local("mkdir -p versions").failed is True:
-            return None
-    if local("tar -cvzf {} web_static".format(file)).failed is True:
+    """
+    Create a .tgz archive from web_static content.
+    """
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    archive_path = f"versions/web_static_{timestamp}.tgz"
+
+    if not os.path.exists("versions"):
+        os.makedirs("versions")
+
+    result = local("tar -czvf {} web_static".format(archive_path))
+    if result.succeeded:
+        return archive_path
+    else:
         return None
-    return file
 
 
 def do_deploy(archive_path):
-    """Distributes an archive to a web server.
-    Args:
-        archive_path (str): The path of the archive to distribute.
-    Returns:
-        If the file doesn't exist at archive_path or an error occurs - False.
-        Otherwise - True.
     """
+    Distributes an archive to the web servers and deploys it
+    """
+
     if os.path.isfile(archive_path) is False:
         return False
     file = archive_path.split("/")[-1]
