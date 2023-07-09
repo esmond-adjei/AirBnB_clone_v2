@@ -1,28 +1,30 @@
 #!/usr/bin/python3
-# Fabfile to delete out-of-date archives.
+# cleans web static archives
+from fabric.api import run, local, hosts, env
 import os
-from fabric.api import *
 
-env.hosts = ["54.160.85.72", "35.175.132.106"]
+env.hosts = ['18.207.233.152', '100.26.221.176']
 
 
 def do_clean(number=0):
-    """Delete out-of-date archives.
-    Args:
-        number (int): The number of archives to keep.
-    If number is 0 or 1, keeps only the most recent archive. If
-    number is 2, keeps the most and second-most recent archives,
-    etc.
     """
-    number = 1 if int(number) == 0 else int(number)
+    Deletes out-of-date archives from the versions and releases folders
+    """
+    if number == 0 or number == 1:
+        number = 1
+    else:
+        number = int(number)
 
-    archives = sorted(os.listdir("versions"))
-    [archives.pop() for i in range(number)]
-    with lcd("versions"):
-        [local("rm ./{}".format(a)) for a in archives]
+    local_archives = local('ls -1t versions', capture=True).split('\n')
+    remote_archives = run('ls -1t /data/web_static/releases').split('\n')
 
-    with cd("/data/web_static/releases"):
-        archives = run("ls -tr").split()
-        archives = [a for a in archives if "web_static_" in a]
-        [archives.pop() for i in range(number)]
-        [run("rm -rf ./{}".format(a)) for a in archives]
+    with hosts(env.hosts):
+        local('mkdir -p versions')
+        for archive in local_archives[number:]:
+            local('rm -f versions/{}'.format(archive))
+
+        with cd('/data/web_static/releases'):
+            for archive in remote_archives[number:]:
+                run('rm -rf {}'.format(archive))
+
+    print("Cleaned archives successfully!")
