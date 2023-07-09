@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+# Deploys source code to server
 from fabric.api import env, put, run
 from os.path import exists
 
